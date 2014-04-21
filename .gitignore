@@ -1,5 +1,7 @@
 .DS_Store
 .bundle/
+bin/*
+!bin/cookbook
 vendor/gems
 pkg/
 
