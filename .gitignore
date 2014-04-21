@@ -1,8 +1,0 @@
-.DS_Store
-.bundle/
-vendor/gems
-pkg/
-
-# Sub-repositories for release
-gh-pages
-homebrew-formulae
