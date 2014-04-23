@@ -14,10 +14,10 @@ module Cookbook
     private
     
     def update_library
-      if Dir.exists? catalog_dir
-        g = Git.open(catalog_dir)
+      if Dir.exists? library_dir
+        g = Git.open(library_dir)
       else
-        g = Git.clone( @url, catalog_dir )
+        g = Git.clone( @url, library_dir )
       end
       g.pull
     end
@@ -26,12 +26,12 @@ module Cookbook
       Catalog.new(catalog_path)
     end
     
-    def catalog_dir
+    def library_dir
       Config.base_directory + '/library'
     end
     
     def catalog_path
-      catalog_dir + '/catalog'
+      library_dir + '/catalog'
     end
     
   end
