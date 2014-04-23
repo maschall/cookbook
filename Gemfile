@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 group :dist do
-  
+  gem 'git'
 end
 
 group :test do
