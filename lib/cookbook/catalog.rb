@@ -1,10 +1,10 @@
 module Cookbook
   class Catalog
     
-    attr_accessor :cards
+    attr_accessor :recipes
     
     def initialize(path)
-      self.cards = catalog_from_file(path)['cards'].map { |cardid, card| [cardid, Card.new(card)] }
+      self.recipes = catalog_from_file(path)['recipes'].map { |id, recipe| [id, Recipe.new(recipe)] }
     end
     
     private

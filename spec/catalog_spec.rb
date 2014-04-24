@@ -4,7 +4,7 @@ describe Cookbook::Catalog do
   it 'will load from the catalog file' do
     test_catalog = 
     '
-      cards:
+      recipes:
         ios:
           name: iOS Template
           url: git@github.com:maschall/cookbook-ios.git
@@ -22,12 +22,12 @@ describe Cookbook::Catalog do
     YAML.stub(:load_file).and_return( YAML.load(test_catalog) )
     YAML.should_receive(:load_file).with('somewhere/test/path')
     
-    Cookbook::Card.stub(:new)
-    Cookbook::Card.should_receive(:new).exactly(3).times
+    Cookbook::Recipe.stub(:new)
+    Cookbook::Recipe.should_receive(:new).exactly(3).times
     
     catalog = Cookbook::Catalog.new('somewhere/test/path')
     
-    catalog.cards.length.should eq(3)
+    catalog.recipes.length.should eq(3)
   end
   
 end

@@ -1,5 +1,5 @@
 module Cookbook
-  class Card
+  class Recipe
   
     attr_accessor :url,
      :name,

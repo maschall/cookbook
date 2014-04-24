@@ -14,7 +14,6 @@ module Cookbook
     def initialize(path = Config.config_file_path)
       configuration_from_file(path).each_pair do |attribute, value|
         set_method = "#{attribute}="
-        puts set_method
         if respond_to?(set_method)
           send(set_method, value)
         end
