@@ -1,63 +1,45 @@
 require 'spec_helper'
 
 describe Cookbook::Library do
+  before(:each) do
+    @library = create_library()
+    mock_config = double(Cookbook::Config)
+    mock_config.stub(:cookbook_urls).and_return(['1', '2'])
+    @library.instance_variable_set("@config", mock_config)
+  end
+  
   describe '#cookbooks' do
-    before(:each) do
-      @library = create_library('test')
+    it 'returns an array' do
+      @library.cookbooks.count.should eq(2)
     end
     
-    it 'will update catalog' do
-      @library.stub(:update_library)
+    it 'returns an array of cookbooks' do
+      Cookbook::Cookbook.should_receive(:new).exactly(2).times
       
-      @library.should_receive(:update_library)
-      
-      @library.cookbook
-    end
-    
-    it 'will create a git directory' do
-      Dir.stub(:exists?).and_return(false)
-      
-      git = double(Git::Base)
-      git.stub(:pull)
-      Git.stub(:clone).and_return(git)
-      Git.should_receive(:clone)
-      
-      @library.cookbook
-    end
-    
-    it 'will load the git directory' do
-      Dir.stub(:exists?).and_return(true)
-      
-      git = double(Git::Base)
-      git.stub(:pull)
-      Git.stub(:open).and_return(git)
-      Git.should_receive(:open)
-      
-      @library.cookbook
-    end
-    
-    it 'will pull the latest' do
-      Dir.stub(:exists?).and_return(true)
-      git = double(Git::Base)
-      git.stub(:pull)
-      Git.stub(:open).and_return(git)
-      
-      git.should_receive(:pull)
-      
-      @library.cookbook
-    end
-    
-    it 'will read the catalog' do
-      @library.stub(:update_library)
-      
-      Cookbook::Cookbook.should_receive(:new)
-      
-      @library.cookbook
+      @library.cookbooks
     end
   end
   
-  def create_library(url)
+  describe '#update_library' do
+    it 'will tell each cookbook to update' do
+      cookbook1 = create_cookbook_expecting_update
+      cookbook2 = create_cookbook_expecting_update
+      
+      @library.stub(:cookbooks).and_return([cookbook1, cookbook2])
+      
+      @library.update_library
+    end
+  end
+  
+  def create_library()
     Cookbook::Cookbook.stub(:new)
-    Cookbook::Library.new(url)
+    Cookbook::Library.new()
+  end
+  
+  def create_cookbook_expecting_update()
+    cookbook = double(Cookbook::Cookbook)
+    cookbook.stub(:update)
+    cookbook.should_receive(:update)
+    cookbook
   end
 end

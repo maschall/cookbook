@@ -9,25 +9,16 @@ module Cookbook
       File.expand_path('../../../defaults/config', __FILE__)
     end
     
-    attr_accessor :library_url
+    attr_accessor :cookbook_urls
     
     def initialize(path = Config.config_file_path)
-      configuration_from_file(path).each_pair do |attribute, value|
-        set_method = "#{attribute}="
-        if respond_to?(set_method)
-          send(set_method, value)
-        end
-      end
+      self.cookbook_urls = configuration_from_file(path)['cookbooks']
     end
     
     private
     
     def configuration_from_file(path)
-      if File.exists? path
-        configuration = YAML.load_file(path)
-      else
-        {}
-      end
+      YAML.load_file(path)
     end
     
   end

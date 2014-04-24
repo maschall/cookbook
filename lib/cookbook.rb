@@ -1,6 +1,6 @@
 # RUBY requirement
 require 'optparse'
-require 'ostruct'
+require 'uri'
 require 'yaml'
 
 # 3rd Party

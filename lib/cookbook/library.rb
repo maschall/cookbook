@@ -1,40 +1,30 @@
 module Cookbook
   class Library
     
-    attr_accessor :cookbooks
-    
-    def initialize(url)
-      @url = url
-    end
-    
-    def cookbook
-      update_library
-      
-      read_cookbook
-    end
-    
-    private
-    
-    def update_library
-      if Dir.exists? library_dir
-        g = Git.open(library_dir)
-      else
-        g = Git.clone( @url, library_dir )
-      end
-      g.pull
-    end
-    
-    def read_cookbook
-      Cookbook.new(cookbook_path)
-    end
-    
-    def library_dir
+    def self.library_dir
       Config.base_directory + '/library'
     end
     
-    def cookbook_path
-      library_dir + '/cookbook'
+    attr_accessor :cookbooks
+    
+    def initialize()
+      @config = Config.new()
     end
+    
+    def cookbooks
+      @config.cookbook_urls.map { |url| Cookbook.new(url) }
+    end
+    
+    #def add_cookbook(url)
+      #@config.cookbook_urls.push(url)
+      #@config.save()
+    #end
+    
+    def update_library
+      cookbooks.each { |book| book.update }
+    end
+    
+    private
     
   end
 end

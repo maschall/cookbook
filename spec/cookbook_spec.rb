@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Cookbook::Cookbook do
+  before(:each) do
+    @cookbook = Cookbook::Cookbook.new('https://github.com/maschall/cookbook-cookbook.git')
+  end
+  
   it 'will load from the cookbook file' do
     test_cookbook = 
     '
@@ -20,14 +24,49 @@ describe Cookbook::Cookbook do
     '
     
     YAML.stub(:load_file).and_return( YAML.load(test_cookbook) )
-    YAML.should_receive(:load_file).with('somewhere/test/path')
+    
+    Cookbook::Library.stub(:library_dir).and_return('path/to/library')
+    
+    YAML.should_receive(:load_file).with('path/to/library/maschall/cookbook-cookbook.git/catalog')
     
     Cookbook::Recipe.stub(:new)
     Cookbook::Recipe.should_receive(:new).exactly(3).times
     
-    cookbook = Cookbook::Cookbook.new('somewhere/test/path')
-    
-    cookbook.recipes.length.should eq(3)
+    @cookbook.recipes.length.should eq(3)
   end
   
+  describe '#update' do
+    it 'will create a git directory' do
+      Dir.stub(:exists?).and_return(false)
+      
+      git = double(Git::Base)
+      git.stub(:pull)
+      Git.stub(:clone).and_return(git)
+      Git.should_receive(:clone)
+      
+      @cookbook.update
+    end
+    
+    it 'will load the git directory' do
+      Dir.stub(:exists?).and_return(true)
+      
+      git = double(Git::Base)
+      git.stub(:pull)
+      Git.stub(:open).and_return(git)
+      Git.should_receive(:open)
+      
+      @cookbook.update
+    end
+    
+    it 'will pull the latest' do
+      Dir.stub(:exists?).and_return(true)
+      git = double(Git::Base)
+      git.stub(:pull)
+      Git.stub(:open).and_return(git)
+      
+      git.should_receive(:pull)
+      
+      @cookbook.update
+    end
+  end
 end

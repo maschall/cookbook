@@ -2,12 +2,10 @@ module Cookbook
   class CLI
     def initialize(argv)
       @argv = argv
-      @options = OpenStruct.new
     end
     
     def run
       parse_command_line_options
-      # DO THE REST
     end
     
     private
@@ -36,7 +34,15 @@ module Cookbook
         end
         
         opts.on('-l', '--list', 'List the avaialable Cookbooks') do
-          
+          Library.new.cookbooks.each do |book|
+            book.print
+            puts
+          end
+        end
+        
+        opts.on('-u', '--update', 'Update all the cookbooks') do
+          Library.new().update_library
+          exit
         end
       end
     end

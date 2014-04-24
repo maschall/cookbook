@@ -1,1 +1,2 @@
-library_url: https://github.com/maschall/cookbook-library.git
+cookbooks: 
+  - https://github.com/maschall/cookbook-cookbook.git

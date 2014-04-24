@@ -1,16 +1,39 @@
 module Cookbook
   class Cookbook
     
-    attr_accessor :recipes
+    def initialize(url)
+      @url = url
+    end
     
-    def initialize(path)
-      self.recipes = cookbook_from_file(path)['recipes'].map { |id, recipe| [id, Recipe.new(recipe)] }
+    def update
+      if Dir.exists? cookbook_dir
+        g = Git.open(cookbook_dir)
+      else
+        g = Git.clone(@url, cookbook_dir)
+      end
+      g.pull
+    end
+    
+    def recipes
+      @recipes ||= cookbook_from_file(cookbook_catalog)['recipes'].map { |id, recipe| [id, Recipe.new(recipe)] }
     end
     
     private
     
     def cookbook_from_file(path)
-      cookbook = YAML.load_file(path)
+      YAML.load_file(path)
+    end
+    
+    def cookbook_path
+      Library.library_dir + cookbook_dir
+    end
+    
+    def cookbook_dir
+      @cookbook_dir ||= URI(@url).path
+    end
+    
+    def cookbook_catalog
+      cookbook_path + '/catalog'
     end
     
   end
