@@ -11,7 +11,7 @@ describe Cookbook::Library do
       
       @library.should_receive(:update_library)
       
-      @library.cookbooks
+      @library.cookbook
     end
     
     it 'will create a git directory' do
@@ -22,7 +22,7 @@ describe Cookbook::Library do
       Git.stub(:clone).and_return(git)
       Git.should_receive(:clone)
       
-      @library.cookbooks
+      @library.cookbook
     end
     
     it 'will load the git directory' do
@@ -33,7 +33,7 @@ describe Cookbook::Library do
       Git.stub(:open).and_return(git)
       Git.should_receive(:open)
       
-      @library.cookbooks
+      @library.cookbook
     end
     
     it 'will pull the latest' do
@@ -44,20 +44,20 @@ describe Cookbook::Library do
       
       git.should_receive(:pull)
       
-      @library.cookbooks
+      @library.cookbook
     end
     
     it 'will read the catalog' do
       @library.stub(:update_library)
       
-      Cookbook::Catalog.should_receive(:new)
+      Cookbook::Cookbook.should_receive(:new)
       
-      @library.cookbooks
+      @library.cookbook
     end
   end
   
   def create_library(url)
-    Cookbook::Catalog.stub(:new)
+    Cookbook::Cookbook.stub(:new)
     Cookbook::Library.new(url)
   end
 end

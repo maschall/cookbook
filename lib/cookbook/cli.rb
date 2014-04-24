@@ -26,7 +26,7 @@ module Cookbook
         opts.banner = 'Usage: cookbook [-v | --version] [-h | --help]'
         
         opts.on('-v', '--version', 'Display the version and exit') do
-          puts "Version: #{Cookbook::VERSION}"
+          puts "Version: #{VERSION}"
           exit
         end
         

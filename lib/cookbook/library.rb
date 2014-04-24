@@ -1,14 +1,16 @@
 module Cookbook
   class Library
     
+    attr_accessor :cookbooks
+    
     def initialize(url)
       @url = url
     end
     
-    def cookbooks
+    def cookbook
       update_library
       
-      @catalog = read_catalog
+      read_cookbook
     end
     
     private
@@ -22,16 +24,16 @@ module Cookbook
       g.pull
     end
     
-    def read_catalog
-      Catalog.new(catalog_path)
+    def read_cookbook
+      Cookbook.new(cookbook_path)
     end
     
     def library_dir
       Config.base_directory + '/library'
     end
     
-    def catalog_path
-      library_dir + '/catalog'
+    def cookbook_path
+      library_dir + '/cookbook'
     end
     
   end

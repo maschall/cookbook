@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Cookbook::Catalog do
-  it 'will load from the catalog file' do
-    test_catalog = 
+describe Cookbook::Cookbook do
+  it 'will load from the cookbook file' do
+    test_cookbook = 
     '
       recipes:
         ios:
@@ -19,15 +19,15 @@ describe Cookbook::Catalog do
           description: A cookbook template for Ruby
     '
     
-    YAML.stub(:load_file).and_return( YAML.load(test_catalog) )
+    YAML.stub(:load_file).and_return( YAML.load(test_cookbook) )
     YAML.should_receive(:load_file).with('somewhere/test/path')
     
     Cookbook::Recipe.stub(:new)
     Cookbook::Recipe.should_receive(:new).exactly(3).times
     
-    catalog = Cookbook::Catalog.new('somewhere/test/path')
+    cookbook = Cookbook::Cookbook.new('somewhere/test/path')
     
-    catalog.recipes.length.should eq(3)
+    cookbook.recipes.length.should eq(3)
   end
   
 end
