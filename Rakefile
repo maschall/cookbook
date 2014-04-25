@@ -42,14 +42,14 @@ namespace :homebrew do
 
   desc 'Checkout homebrew repo locally'
   task :checkout do
-    `git clone git@github.com:thoughtbot/homebrew-formulae.git #{HOMEBREW_FORMULAE_DIR}`
+    `git clone git@github.com:maschall/homebrew-formulae.git #{HOMEBREW_FORMULAE_DIR}`
   end
 
   desc 'Check in the new Homebrew formula'
   task :commit do
     Dir.chdir(HOMEBREW_FORMULAE_DIR) do
-      `git add Formula/liftoff.rb`
-      `git commit -m "liftoff: Release version #{Cookbook::VERSION}"`
+      `git add Formula/cookbook.rb`
+      `git commit -m "cookbook: Release version #{Cookbook::VERSION}"`
     end
   end
 
