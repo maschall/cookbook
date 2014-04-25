@@ -42,14 +42,14 @@ namespace :homebrew do
 
   desc 'Checkout homebrew repo locally'
   task :checkout do
-    `git clone git@github.com:thoughtbot/homebrew-formulae.git #{HOMEBREW_FORMULAE_DIR}`
+    `git clone git@github.com:maschall/homebrew-formulae.git #{HOMEBREW_FORMULAE_DIR}`
   end
 
   desc 'Check in the new Homebrew formula'
   task :commit do
     Dir.chdir(HOMEBREW_FORMULAE_DIR) do
-      `git add Formula/liftoff.rb`
-      `git commit -m "liftoff: Release version #{Cookbook::VERSION}"`
+      `git add Formula/cookbook.rb`
+      `git commit -m "cookbook: Release version #{Cookbook::VERSION}"`
     end
   end
 
@@ -70,7 +70,7 @@ namespace :homebrew do
   namespace :formula do
     desc 'Build homebrew formula'
     task :build do
-      formula = File.read('homebrew/liftoff.rb')
+      formula = File.read('homebrew/cookbook.rb')
       formula.gsub!('__VERSION__', Cookbook::VERSION)
       formula.gsub!('__SHA__', `shasum #{GH_PAGES_DIR}/Cookbook-#{Cookbook::VERSION}.tar.gz`.split.first)
       File.write("#{HOMEBREW_FORMULAE_DIR}/Formula/cookbook.rb", formula)
